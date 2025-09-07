@@ -2,25 +2,35 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { Client, Collection, GatewayIntentBits } = require('discord.js');
 const { createBackend } = require('./backend.js');
-const colors = require('colors');
-require('dotenv').config();
+const colors = require('colors'); // Pastikan 'colors' diimpor
+
+// --- PERUBAHAN UTAMA UNTUK VERCEL ---
+// Menggunakan dotenv hanya jika tidak di lingkungan produksi (seperti di Termux)
+// Di Vercel, variabel akan dimuat secara otomatis
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config();
+}
+
+// Membaca token langsung dari Environment Variables
+const token = process.env.DISCORD_TOKEN;
+// ------------------------------------
 
 const banner = `
-  ██████╗ ██╗██████╗  ██████╗  █████╗ ███████╗███████╗    ██████╗  ██████╗ ████████╗
-  ██╔══██╗██║██╔══██╗██╔═══██╗██╔══██╗██╔════╝██╔════╝    ██╔══██╗██╔═══██╗╚══██╔══╝
-  ██████╔╝██║██████╔╝██║   ██║███████║███████╗███████╗    ██████╔╝██║   ██║   ██║   
-  ██╔═══╝ ██║██╔══██╗██║   ██║██╔══██║╚════██║╚════██║    ██╔══██╗██║   ██║   ██║   
-  ██║     ██║██║  ██║╚██████╔╝██║  ██║███████║███████║    ██████╔╝╚██████╔╝   ██║   
-  ╚═╝     ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚══════╝    ╚═════╝  ╚═════╝    ╚═╝   
-`.green;
+  ██████╗ ██╗██████╗  █████╗  ██████╗ ███████╗
+  ██╔════╝ ██║██╔══██╗██╔══██╗██╔════╝ ██╔════╝
+  ██║  ███╗██║██████╔╝███████║██║  ███╗███████╗
+  ██║   ██║██║██╔══██╗██╔══██║██║   ██║╚════██║
+  ╚██████╔╝██║██║  ██║██║  ██║╚██████╔╝███████║
+   ╚═════╝ ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚══════╝
+                                         Bot
+`.cyan;
 
 console.log(banner);
-console.log('[INFO] Memulai Bot...'.cyan);
 
 const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
-        GatewayIntentBits.GuildMembers,
+        GatewayIntentBits.GuildMembers, // Diperlukan untuk event member baru
     ]
 });
 
@@ -51,11 +61,15 @@ for (const file of eventFiles) {
     }
 }
 
-client.login(process.env.DISCORD_TOKEN);
+// Memastikan bot hanya login jika token benar-benar ada
+if (!token) {
+    console.error('[FATAL] DISCORD_TOKEN tidak ditemukan! Pastikan sudah diatur di Environment Variables Vercel.'.red);
+    process.exit(1); // Menghentikan proses jika token tidak ditemukan
+}
 
-client.once('ready', () => {
-    console.log(`[INFO] Bot siap! Login sebagai ${client.user.tag}`.cyan);
-    createBackend(client);
-});
+client.login(token);
+
+// Menjalankan server backend
+createBackend(client);
 
 
