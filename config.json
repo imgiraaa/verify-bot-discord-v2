@@ -1,0 +1,26 @@
+{
+  "contoh_id_server": {
+    "channelId": "123456789012345678",
+    "messageId": "123456789012345678",
+    "title": "Verifikasi Server Name",
+    "description": "Klik tombol di bawah untuk verifikasi.",
+    "verifiedRoleId": "123456789012345678",
+    "unverifiedRoleId": "123456789012345678",
+    "successMessage": "Anda berhasil diverifikasi!",
+    "errorMessage": "Captcha yang Anda masukkan salah.",
+    "rules": "1. Patuhi semua aturan.\n2. Bersikap baik.\n3. Selamat bersenang-senang!",
+    "useCaptcha": true,
+    "captchaDifficulty": "sedang"
+  },
+  "1403740213733363803": {
+    "websiteUrl": "https://verify.hostvara.my.id",
+    "title": "📮 VERIFICATION REQUIRED ❗",
+    "description": "We require you to verify before taking action in this community, to verify, please press the button below. Then you will start the verification process, and follow the steps that appear there.",
+    "verifiedRoleId": "1403740213859319824",
+    "unverifiedRoleId": "1403740213733363808",
+    "logChannelId": "1403740215251697807",
+    "accountAge": "30",
+    "welcomeChannelId": "1403740215251697813",
+    "welcomeMessage": "Selamat datang {user} di {server}!"
+  }
+}
